@@ -1,12 +1,8 @@
 package timer;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
 import java.applet.Applet;
 import java.applet.AudioClip;
 
 public class Sound {
-    private SettingsWindow settingsFrame = new SettingsWindow();
     private static AudioClip clip = new AudioClip() {
         @Override
         public void play() {
@@ -33,18 +29,6 @@ public class Sound {
         }
     }
 
-    void play() {
-        try {
-            new Thread() {
-                public void run() {
-                    clip.play();
-                }
-            }.start();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     void loop() {
         try {

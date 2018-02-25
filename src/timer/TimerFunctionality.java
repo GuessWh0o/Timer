@@ -17,6 +17,7 @@ class TimerFunctionality {
     double oneThirdInput;
     JButton startButton;
     JButton resetButton;
+    JButton soundOffOnButton;
     int hrsChosen;
     int minsChosen;
     int secsChosen;
@@ -26,7 +27,7 @@ class TimerFunctionality {
     ImageIcon startIcon;
     ImageIcon pauseIcon;
     ImageIcon resumeIcon;
-    private SettingsWindow settingsFrame = new SettingsWindow();
+    ImageIcon soundOfOnIcon;
 
     //Start timer
     void start() {
@@ -63,7 +64,7 @@ class TimerFunctionality {
                     outputSecs.setText("=====");
                     startButton.setIcon(startIcon);
                     timer.cancel();
-                    Sound sound = new Sound(settingsFrame.getSoundPath());
+                    Sound sound = new Sound(Constants.soundPath);
                     sound.loop();
                 }
             }
@@ -108,7 +109,7 @@ class TimerFunctionality {
                     outputSecs.setText("=====");
                     timer.cancel();
                     startButton.setIcon(startIcon);
-                    Sound sound = new Sound(settingsFrame.getSoundPath());
+                    Sound sound = new Sound(Constants.soundPath);
                     sound.loop();
                 }
             }
@@ -131,5 +132,16 @@ class TimerFunctionality {
         userInputSecs.setText("00");
         startButton.setIcon(startIcon);
         stop();
+    }
+
+    void soundOnOff(boolean soundOn) {
+        if(soundOn) {
+            ImageIcon soundOffIcon = new ImageIcon(getClass().getResource("/images/sound_off.png"));
+            soundOffOnButton.setIcon(soundOffIcon);
+        } else {
+            ImageIcon soundOnIcon = new ImageIcon(getClass().getResource("/images/sound_on.png"));
+            soundOffOnButton.setIcon(soundOnIcon);
+        }
+
     }
 }
