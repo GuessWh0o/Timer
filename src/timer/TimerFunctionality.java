@@ -1,13 +1,16 @@
 package timer;
 
+import timer.utils.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.prefs.Preferences;
 
 import static timer.Sound.stop;
 
-class TimerFunctionality {
+public class TimerFunctionality {
     private Timer timer = new Timer();
     int secsRemaining;
     JTextField userInputHrs;
@@ -15,19 +18,17 @@ class TimerFunctionality {
     JTextField userInputSecs;
     double twoThirdsInput;
     double oneThirdInput;
-    JButton startButton;
-    JButton resetButton;
-    JButton soundOffOnButton;
-    int hrsChosen;
+    public JButton startButton;
+    public JButton resetButton;
+    public int hrsChosen;
     int minsChosen;
     int secsChosen;
     JLabel outputHrs;
     JLabel outputMins;
     JLabel outputSecs;
-    ImageIcon startIcon;
-    ImageIcon pauseIcon;
-    ImageIcon resumeIcon;
-    ImageIcon soundOfOnIcon;
+    public ImageIcon startIcon;
+    public ImageIcon pauseIcon;
+    public ImageIcon resumeIcon;
 
     //Start timer
     void start() {
@@ -46,26 +47,30 @@ class TimerFunctionality {
                 outputSecs.setForeground(Color.decode("#25921A")); //Set the color again for restarting the timer after finishing
                 secsRemaining--;
                 //Color change for 2/3 of seconds remaining
-                if(secsRemaining < twoThirdsInput) {
+                if (secsRemaining < twoThirdsInput) {
                     outputHrs.setForeground(Color.ORANGE);
                     outputMins.setForeground(Color.ORANGE);
                     outputSecs.setForeground(Color.ORANGE);
                 }
                 //Color change for  1/3 of seconds remaining
-                if(secsRemaining < oneThirdInput){
+                if (secsRemaining < oneThirdInput) {
                     outputHrs.setForeground(Color.RED);
                     outputMins.setForeground(Color.RED);
                     outputSecs.setForeground(Color.RED);
                 }
 
-                if(secsRemaining < 0) {
+                if (secsRemaining < 0) {
+                    Preferences prefs = Preferences.userNodeForPackage(getClass());
+                    boolean soundOn = prefs.getBoolean(Constants.SOUND_ON_OFF_KEY, false);
                     outputHrs.setText("=====");
                     outputMins.setText("DONE");
                     outputSecs.setText("=====");
                     startButton.setIcon(startIcon);
                     timer.cancel();
-                    Sound sound = new Sound(Constants.soundPath);
-                    sound.loop();
+                    if (soundOn) {
+                        Sound sound = new Sound(Constants.soundPath);
+                        sound.loop();
+                    }
                 }
             }
         };
@@ -74,7 +79,7 @@ class TimerFunctionality {
     }
 
     //Pause timer
-    void pause() {
+    public void pause() {
         startButton.setIcon(resumeIcon);
         timer.cancel();
     }
@@ -92,18 +97,18 @@ class TimerFunctionality {
                 outputMins.setText(Integer.toString(minsChosen));
                 outputSecs.setText(Integer.toString(secsChosen));
                 secsRemaining--;
-                if(secsRemaining < twoThirdsInput) {
+                if (secsRemaining < twoThirdsInput) {
                     outputHrs.setForeground(Color.ORANGE);
                     outputMins.setForeground(Color.ORANGE);
                     outputSecs.setForeground(Color.ORANGE);
                 }
                 //Color change for  1/3 of seconds remaining
-                if(secsRemaining < oneThirdInput){
+                if (secsRemaining < oneThirdInput) {
                     outputHrs.setForeground(Color.RED);
                     outputMins.setForeground(Color.RED);
                     outputSecs.setForeground(Color.RED);
                 }
-                if(secsRemaining < 0) {
+                if (secsRemaining < 0) {
                     outputHrs.setText("=====");
                     outputMins.setText("DONE");
                     outputSecs.setText("=====");
@@ -119,7 +124,7 @@ class TimerFunctionality {
     }
 
     //Reset timer
-    void reset() {
+    public void reset() {
         timer.cancel();
         outputHrs.setText("=====");
         outputHrs.setForeground(Color.RED);
@@ -132,16 +137,5 @@ class TimerFunctionality {
         userInputSecs.setText("00");
         startButton.setIcon(startIcon);
         stop();
-    }
-
-    void soundOnOff(boolean soundOn) {
-        if(soundOn) {
-            ImageIcon soundOffIcon = new ImageIcon(getClass().getResource("/images/sound_off.png"));
-            soundOffOnButton.setIcon(soundOffIcon);
-        } else {
-            ImageIcon soundOnIcon = new ImageIcon(getClass().getResource("/images/sound_on.png"));
-            soundOffOnButton.setIcon(soundOnIcon);
-        }
-
     }
 }
